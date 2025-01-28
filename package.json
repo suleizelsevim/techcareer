@@ -1,0 +1,22 @@
+{
+  "name": "frontend_fullstack",
+  "version": "1.0.0",
+  "description": "html5,css3,js,ejs,mongo.docker,bootstrap,nodejs,express",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suleizelsevim/techcareer.git"
+  },
+  "keywords": [
+    "html5"
+  ],
+  "author": "suleizelsevim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suleizelsevim/techcareer/issues"
+  },
+  "homepage": "https://github.com/suleizelsevim/techcareer#readme"
+}

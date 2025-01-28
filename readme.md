@@ -98,3 +98,51 @@ npm update express
 npm start
 npm test
 ```
+
+## npm package install (local)
+```sh
+npm list 
+npm list -g
+npm root
+npm root -g
+
+npm install ejs
+npm install body-parser compression cors csurf cookie-parser dotenv ejs express express-rate-limit helmet --save  # birden fazla paketi aynı anda indirebiliriz
+npm -i mongoose mongodb morgan swagger-ui-express typescript winston --save
+
+npm install body-parser compression cors csurf cookie-parser dotenv ejs express express-rate-limit helmet mongoose mongodb morgan swagger-ui-express typescript winston
+
+npm -i nodemon --save-dev
+
+npm -list
+```
+
+## npm package install (global)
+```sh
+npm list 
+npm list -g
+npm root
+npm root -g
+
+npm install ejs -g
+
+npm install body-parser compression cors csurf cookie-parser dotenv ejs express express-rate-limit helmet -g # birden fazla paketi aynı anda indirebiliriz
+npm -i mongoose mongodb morgan swagger-ui-express typescript winston -g
+
+npm list -g
+
+
+```
+
+## npm package install (local - global)
+```sh
+npm list 
+npm list -g
+npm root
+npm root -g
+
+npm install ejs -g
+npm install body-parser --save -g
+
+
+```

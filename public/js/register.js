@@ -189,11 +189,14 @@ $(document).ready(function () {
     $("#register-table tbody").on("click", ".delete-btn", function () {
         const id = $(this).closest("tr").data("id");
 
-        if (!confirm(`${id} nolu Blog'u Silmek İstiyor musunuz?`)) return;
+        if (!confirm(`${id} nolu kullanıcıyı Silmek İstiyor musunuz?`)) return;
 
         $.ajax({
             url: `/register/api/${id}`,
             method: "DELETE",
+            headers: {
+                'CSRF-Token': $("input[name='_csrf']").val() // CSRF token'ını header'a ekle
+            },
             success: fetchRegisterList,
             error: handleError
         });

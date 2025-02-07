@@ -297,6 +297,38 @@ app.get("/register/api", csrfProtection, (request, response) => __awaiter(void 0
         response.status(500).send("Veri alınırken hata oluştu.");
     }
 }));
+app.delete("/register/api/:id", csrfProtection, (req, res) => {
+    const { id } = req.params;
+    const RegisterModel = require("../models/mongoose_blog_register_models");
+    RegisterModel.findByIdAndDelete(id)
+        .then(() => res.status(200).send("Kullanıcı silindi"))
+        .catch((error) => {
+            console.error("Silme hatası:", error);
+            res.status(500).send("Silme işlemi sırasında hata oluştu");
+        });
+});
+app.put("/register/api/:id", csrfProtection, (req, res) => {
+    const { id } = req.params;
+    const { username, password, email } = req.body; // İstemciden gelen veriler
+
+    const RegisterModel = require("../models/mongoose_blog_register_models");
+
+    // Güncellenmek istenen alanları belirliyoruz
+    const updateData = { username, password, email };
+
+    RegisterModel.findByIdAndUpdate(id, updateData, { new: true })
+        .then((updatedUser) => {
+            if (!updatedUser) {
+                return res.status(404).send("Kullanıcı bulunamadı");
+            }
+            res.status(200).send("Kullanıcı başarıyla güncellendi");
+        })
+        .catch((error) => {
+            console.error("Güncelleme hatası:", error);
+            res.status(500).send("Güncelleme işlemi sırasında hata oluştu");
+        });
+});
+
 // Form verilerini işleyen rota
 // DİKKATT: Eğer  blog_api_routes.js post kısmında event.preventDefault(); kapatırsam buraki kodlar çalışır.
 // blog için CSRF koruması eklenmiş POST işlemi

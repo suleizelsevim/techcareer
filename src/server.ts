@@ -300,47 +300,21 @@ app.get("/blog/api", csrfProtection,async  (request:any, response:any) => {
 app.get("/blog", csrfProtection, (request:any, response:any) => {
     response.render("blog", { csrfToken: request.csrfToken() });
 });
+app.get("/register", csrfProtection, (request:any, response:any) => {
+    response.render("register", { csrfToken: request.csrfToken() });
+});
 
 app.get("/register/api", csrfProtection, async (request:any, response:any) => {
-    // İstek gövdesinde JSON(Javascript Object Notation) formatında veri göndereceğini belirtir.
-    //response.setHeader("Content-Type", "application/json");
-    //response.setHeader("Content-Type", "text/plain"); // name Hamit surnameMızrak
-    response.setHeader("Content-Type", "text/html");
-    //response.setHeader("Content-Type", "application/x-www-form-urlencoded"); // name=Hamit&surname=Mizrak
-
-    // cache-control: Yanıtları hızlı sunmak için ve sunucya gereksiz istekleri azaltmak için
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-
-    // Sitemizi başka sitelerde iframe ile açılmasını engellemek
-    // clickjacking saldırılarına karşı korumayı sağlar
-    response.setHeader("X-Frame-Options", "DENY");
-
-    // X-XSS-Protection: Tarayıca tarafından XSS(Cross-Site Scripting) saldırılarıa karşı koruma
-    // XSS saldırısını tespit ederse sayfanın yüklenmesini engeller.
-    response.setHeader("X-XSS-Protection", "1; mode=block");
-
-    // Access Control (CORS Başlıkları)
-    // XBaşka bir kaynaktan gelen istekleri kontrol etmet için CORS başlığı ekleyebiliriz.
-    response.setHeader("Access-Control-Allow-Origin", "https://example.com");
-
-    // Access-Control-Allow-Methods
-    // Sunucunun hangi HTTP yöntemlerini kabul etiğini gösterir.
-    response.setHeader(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-    );
-
-    // Access-Control-Allow-Headers
-    // Bu başlıklar, taryıcınının sunucuya göndereceği özel başlıklar göndersin
-    response.setHeader(
-        "Access-Control-Allow-Headers",
-        "Content-Type, Authorization"
-    );
-
-    // dist/server.js
-    const BlogModel = require("../models/mongoose_blog_models"); // Modeli ekleyin
-        const blogs = await BlogModel.find(); // Tüm blog verilerini al
-        response.json(blogs); // JSON formatında döndür
+        // dist/server.js
+    try {
+        const RegisterModel = require("../models/mongoose_blog_register_models"); // Modeli ekleyin
+        const registers = await RegisterModel.find(); // Tüm register verilerini al
+        response.setHeader("Content-Type", "application/json"); // Yanıtın JSON formatında olduğunu belirtir
+        response.json(registers); // JSON formatında döndür
+    } catch (error) {
+        console.error("Veri alınırken hata oluştu:", error);
+        response.status(500).send("Veri alınırken hata oluştu.");
+    }
 });
 
 // Form verilerini işleyen rota
@@ -387,7 +361,7 @@ app.post("/blog/api", csrfProtection, (request:any, response:any) => {
         });
 });
 
-app.post("/register/api", csrfProtection, (request:any, response:any) => {
+app.post("/register/api", csrfProtection,async (request:any, response:any) => {
     const registerData = {
         username: request.body.username,
         password: request.body.password,
@@ -415,8 +389,8 @@ app.post("/register/api", csrfProtection, (request:any, response:any) => {
         .save()
       .then(() => {
 
-            console.log("Blog başarıyla kaydedildi:", registerData);
-            logger.info("Blog başarıyla kaydedildi:", registerData); //logger: Winston
+            console.log("register başarıyla kaydedildi:", registerData);
+            logger.info("register başarıyla kaydedildi:", registerData); //logger: Winston
             response.send("CSRF ile blog başarıyla kaydedildi.");
         })
         .catch((err:any) => {

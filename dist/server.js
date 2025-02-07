@@ -260,6 +260,9 @@ app.get("/blog/api", csrfProtection, (request, response) => __awaiter(void 0, vo
 app.get("/blog", csrfProtection, (request, response) => {
     response.render("blog", { csrfToken: request.csrfToken() });
 });
+app.get("/register", csrfProtection, (request, response) => {
+    response.render("register", { csrfToken: request.csrfToken() });
+});
 app.get("/register/api", csrfProtection, (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     // İstek gövdesinde JSON(Javascript Object Notation) formatında veri göndereceğini belirtir.
     //response.setHeader("Content-Type", "application/json");
@@ -284,9 +287,15 @@ app.get("/register/api", csrfProtection, (request, response) => __awaiter(void 0
     // Bu başlıklar, taryıcınının sunucuya göndereceği özel başlıklar göndersin
     response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     // dist/server.js
-    const BlogModel = require("../models/mongoose_blog_models"); // Modeli ekleyin
-    const blogs = yield BlogModel.find(); // Tüm blog verilerini al
-    response.json(blogs); // JSON formatında döndür
+    try {
+        const RegisterModel = require("../models/mongoose_blog_register_models"); // Modeli ekleyin
+        const registers = yield RegisterModel.find(); // Tüm blog verilerini al
+        response.json(registers); // JSON formatında döndür
+    }
+    catch (error) {
+        console.error("Veri alınırken hata oluştu:", error);
+        response.status(500).send("Veri alınırken hata oluştu.");
+    }
 }));
 // Form verilerini işleyen rota
 // DİKKATT: Eğer  blog_api_routes.js post kısmında event.preventDefault(); kapatırsam buraki kodlar çalışır.
@@ -327,7 +336,7 @@ app.post("/blog/api", csrfProtection, (request, response) => {
         response.status(500).send("Veritabanı hatası oluştu.");
     });
 });
-app.post("/register/api", csrfProtection, (request, response) => {
+app.post("/register/api", csrfProtection, (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const registerData = {
         username: request.body.username,
         password: request.body.password,
@@ -351,8 +360,8 @@ app.post("/register/api", csrfProtection, (request, response) => {
     newRegister
         .save()
         .then(() => {
-        console.log("Blog başarıyla kaydedildi:", registerData);
-        logger.info("Blog başarıyla kaydedildi:", registerData); //logger: Winston
+        console.log("register başarıyla kaydedildi:", registerData);
+        logger.info("register başarıyla kaydedildi:", registerData); //logger: Winston
         response.send("CSRF ile blog başarıyla kaydedildi.");
     })
         .catch((err) => {
@@ -360,7 +369,7 @@ app.post("/register/api", csrfProtection, (request, response) => {
         logger.error("Veritabanı hatası:", err); //logger: Winston
         response.status(500).send("Veritabanı hatası oluştu.");
     });
-});
+}));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // EJS(Embedded JavaScript) Görüntüleme motorunu aktifleştirdim

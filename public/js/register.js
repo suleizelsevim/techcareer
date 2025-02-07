@@ -41,8 +41,8 @@ $(document).ready(function () {
     const validateForm = () => {
         clearErrors();
         let isValid = true;
-        const username = $("#username").val();
-        const charCount = username.length;
+        const password = $("#password").val();
+        const charCount = password.length;
 
         if ($("#username").val().trim() === "") {
             showError("#username", "kullanıcı adı boş bırakılamaz!");
@@ -51,7 +51,7 @@ $(document).ready(function () {
             showValid("#username", "kullanıcı adı geçerli.");
         }
 
-        if (content.trim() === "") {
+        if (password.trim() === "") {
             showError("#password", "şifre boş bırakılamaz!");
             isValid = false;
         } else if (charCount > maxChars) {
@@ -101,7 +101,9 @@ $(document).ready(function () {
             method: "GET",
             success: function (data) {
                 const $tbody = $("#register-table tbody").empty();
-                data=JSON.parse(data);
+                data = JSON.parse(data);
+                console.log("data", data);
+                
                 data.forEach(item => {
                     $tbody.append(`
                         <tr data-id="${item._id}">
@@ -148,7 +150,7 @@ $(document).ready(function () {
             $.ajax({
                 url: `/register/api/${updateId}`,
                 method: "PUT",
-                data: JSON.parse(registerData),
+                data: registerData,
                 success: function () {
                     fetchRegisterList();
                     resetForm();
@@ -159,7 +161,7 @@ $(document).ready(function () {
             $.ajax({
                 url: "/register/api",
                 method: "POST",
-                data: JSON.parse(registerData),
+                data: registerData,
                 success: function () {
                     fetchRegisterList();
                     resetForm();

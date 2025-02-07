@@ -57,9 +57,6 @@ const BlogRegisterSchema = new mongoose.Schema({
 // Sanal alan (Virtuals) - İçerik özetini döndürme
 // summary: Blog içeriğinin ilk 100 karakterini döndüren bir sanal alan ekledik.
 // Bu, API cevaplarında sadece kısa bir özet göstermek için kullanılabilir.
-BlogRegisterSchema.virtual("summary").get(function () {
-    return this.content.substring(0, 100) + "..."; // İlk 100 karakter ve ardından ...
-});
 
 // Şema için ön middleware - Her kaydetmeden önce başlık ve içeriği büyük harflerle güncelleme
 // Şema Middleware (Pre-save Hook): pre("save"): Kaydedilmeden önce başlık ve içeriğin ilk harflerini büyük yapmak için bir ön middleware ekledik.

@@ -1,22 +1,16 @@
 {
-  "name": "techcareer",
+  "name": "2025_techcareer_frontend_fullstack_1",
   "version": "1.0.0",
-  "description": "",
-  "main": "./dist/server.js",
+  "description": "[GitHub Address](https://github.com/hamitmizrak/2025_techcareer_frontend_fullstack_1.git)\r [Mongo Database]()\r ---",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node  ./dist/server.js",
-    "server:start": "lite-server",
-    "build_watch": "tsc -w --pretty",
-    "nodemon_app_watch": "nodemon --watch src --watch dist ./dist/server.js",
-    "dev:seri": "npm-run-all --serial build_watch nodemon_app_watch",
-    "dev:paralel": "concurrently -k \"npm run build_watch\" \"npm run nodemon_app_watch\" \"npm run server:start\"",
-    "dev:start": "npm-run-all --serial build_watch nodemon_app_watch start"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "2025_techcareer_frontend_fullstack_1": "file:",
     "body-parser": "^1.20.3",
     "compression": "^1.7.5",
     "cookie-parser": "^1.4.7",
@@ -31,7 +25,6 @@
     "morgan": "^1.10.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "techcareer": "file:",
     "winston": "^3.17.0"
   },
   "devDependencies": {

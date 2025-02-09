@@ -278,7 +278,6 @@ const validatePassword = (password) => {
 
 
         $("#username").val(row.find("td:eq(1)").text());
-        $("#password").val(row.find("td:eq(2)").text());
         $("#email").val(row.find("td:eq(3)").text());
 
         isUpdating = true;

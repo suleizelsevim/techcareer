@@ -5,7 +5,7 @@
 // NOT: Eğer bu sayfada Typescript kullansaydım reqire yerine import kullanacaktım.
 // Import
 const mongoose = require("mongoose");
-const moment=require("moment");
+const bcrypt=require("bcrypt");
 // Schema adından (BlogPostSchema)
 const BlogRegisterSchema = new mongoose.Schema({
         // 1.YOL (HEADER)
@@ -52,6 +52,23 @@ const BlogRegisterSchema = new mongoose.Schema({
         // Zaman Bilgileri: timestamps: createdAt ve updatedAt alanları otomatik olarak eklenir ve her işlemde güncellenir.
         timestamps: true,
     }); //end PostSchema
+
+    BlogRegisterSchema.pre('save', async function(next) {
+    if (this.isModified('password') || this.isNew) {
+        try {
+            const salt = await bcrypt.genSalt(10);
+            this.password = await bcrypt.hash(this.password, salt);
+            next();
+        } catch (error) {
+            next(error);
+        }
+    } else {
+        return next();
+    }
+});
+BlogRegisterSchema.methods.comparePassword = async function(password) {
+    return await bcrypt.compare(password, this.password);
+};
 
 ////////////////////////////////////////////////////////////////////
 // Sanal alan (Virtuals) - İçerik özetini döndürme

@@ -154,6 +154,7 @@ app.use(cookieParser());
 const csrfProtection = csrf({ cookie: true });
 // Express için Log
 const morgan = require("morgan");
+const bcrypt = require("bcrypt");
 // Morgan Aktifleştirmek
 // Morgan'ı Express.js uygulamasında kullanalım.
 //app.use(morgan('dev')); //dev: kısa ve renkli loglar göster
@@ -370,6 +371,12 @@ app.put("/register/api/:id", csrfProtection, (req, res) => __awaiter(void 0, voi
         if (!updatedUser) {
             return res.status(404).send("Kullanıcı bulunamadı");
         }
+        if (password) {
+            const user = yield RegisterModel.findById(id);
+            const salt = yield bcrypt.genSalt(10);
+            updatedUser.password = yield bcrypt.hash(password, salt);
+        }
+        yield updatedUser.save();
         res.status(200).send("Kullanıcı başarıyla güncellendi");
     }
     catch (error) {

@@ -93,14 +93,12 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 // 1.YOL (LOCALHOST)
 // .env dosyasındaki bilgilerden bağlantı URL'si oluşturuluyor
-const databaseLocalUrl = process.env.MONGO_USERNAME && process.env.MONGO_PASSWORD
-    ? `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@127.0.0.1:${process.env.MONGO_PORT}/Cluster0`
-    : "mongodb://ssevim20:Mongodbsifrem123.@127.0.0.1:27017/Cluster0";
+const databaseLocalUrl = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@127.0.0.1:${process.env.MONGO_PORT}/Cluster0`;
 // 2.YOL (LOCALHOST)
 const databaseDockerUrl = "mongodb://localhost:27017/blogDB";
 // MongoDB Cloud (username,password)
 // 3.YOL (CLOUD)
-const databaseCloudUrl = "mongodb+srv://ssevim20:Mongodbsifrem123.@cluster0.fz9n1pb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const databaseCloudUrl = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}.@cluster0.fz9n1pb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 // 4.YOL (.dotenv)
 require("dotenv").config();
 // Localhostta MongoDB yüklüyse)

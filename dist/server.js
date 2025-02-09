@@ -349,6 +349,36 @@ app.post("/register/api", csrfProtection, (request, response) => __awaiter(void 
         response.status(500).send("Veritabanı hatası oluştu.");
     });
 }));
+app.delete("/register/api/:id", csrfProtection, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const RegisterModel = require("../models/mongoose_blog_register_models");
+        yield RegisterModel.findByIdAndDelete(id);
+        res.status(200).send("Kullanıcı silindi");
+    }
+    catch (error) {
+        console.error("Silme hatası:", error);
+        res.status(500).send("Silme işlemi sırasında hata oluştu");
+    }
+}));
+// Kullanıcı güncelleme işlemi
+app.put("/register/api/:id", csrfProtection, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const { username, password, email } = req.body;
+        const RegisterModel = require("../models/mongoose_blog_register_models");
+        const updateData = { username, password, email };
+        const updatedUser = yield RegisterModel.findByIdAndUpdate(id, updateData, { new: true });
+        if (!updatedUser) {
+            return res.status(404).send("Kullanıcı bulunamadı");
+        }
+        res.status(200).send("Kullanıcı başarıyla güncellendi");
+    }
+    catch (error) {
+        console.error("Güncelleme hatası:", error);
+        res.status(500).send("Güncelleme işlemi sırasında hata oluştu");
+    }
+}));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // EJS(Embedded JavaScript) Görüntüleme motorunu aktifleştirdim

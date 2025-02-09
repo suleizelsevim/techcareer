@@ -305,6 +305,7 @@ app.get("/register", csrfProtection, (request:any, response:any) => {
 });
 
 app.get("/register/api", csrfProtection, async (request:any, response:any) => {
+  
         // dist/server.js
     try {
         const RegisterModel = require("../models/mongoose_blog_register_models"); // Modeli ekleyin
@@ -400,6 +401,37 @@ app.post("/register/api", csrfProtection,async (request:any, response:any) => {
         });
 });
 
+app.delete("/register/api/:id", csrfProtection, async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const RegisterModel = require("../models/mongoose_blog_register_models");
+        await RegisterModel.findByIdAndDelete(id);
+        res.status(200).send("Kullanıcı silindi");
+    } catch (error) {
+        console.error("Silme hatası:", error);
+        res.status(500).send("Silme işlemi sırasında hata oluştu");
+    }
+});
+
+// Kullanıcı güncelleme işlemi
+app.put("/register/api/:id", csrfProtection, async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { username, password, email } = req.body;
+        const RegisterModel = require("../models/mongoose_blog_register_models");
+        const updateData = { username, password, email };
+        const updatedUser = await RegisterModel.findByIdAndUpdate(id, updateData, { new: true });
+        
+        if (!updatedUser) {
+            return res.status(404).send("Kullanıcı bulunamadı");
+        }
+        
+        res.status(200).send("Kullanıcı başarıyla güncellendi");
+    } catch (error) {
+        console.error("Güncelleme hatası:", error);
+        res.status(500).send("Güncelleme işlemi sırasında hata oluştu");
+    }
+});
 
 
 

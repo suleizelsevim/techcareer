@@ -348,28 +348,28 @@ app.post("/register/api", csrfProtection, (request, response) => __awaiter(void 
         response.status(500).send("Veritabanı hatası oluştu.");
     });
 }));
-app.delete("/register/api/:id", csrfProtection, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.delete("/register/api/:id", csrfProtection, (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
+        const { id } = request.params;
         const RegisterModel = require("../models/mongoose_blog_register_models");
         yield RegisterModel.findByIdAndDelete(id);
-        res.status(200).send("Kullanıcı silindi");
+        response.status(200).send("Kullanıcı silindi");
     }
     catch (error) {
         console.error("Silme hatası:", error);
-        res.status(500).send("Silme işlemi sırasında hata oluştu");
+        response.status(500).send("Silme işlemi sırasında hata oluştu");
     }
 }));
 // Kullanıcı güncelleme işlemi
-app.put("/register/api/:id", csrfProtection, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.put("/register/api/:id", csrfProtection, (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const { username, password, email } = req.body;
+        const { id } = request.params;
+        const { username, password, email } = request.body;
         const RegisterModel = require("../models/mongoose_blog_register_models");
         const updateData = { username, password, email };
         const updatedUser = yield RegisterModel.findByIdAndUpdate(id, updateData, { new: true });
         if (!updatedUser) {
-            return res.status(404).send("Kullanıcı bulunamadı");
+            return response.status(404).send("Kullanıcı bulunamadı");
         }
         if (password) {
             const user = yield RegisterModel.findById(id);
@@ -377,11 +377,11 @@ app.put("/register/api/:id", csrfProtection, (req, res) => __awaiter(void 0, voi
             updatedUser.password = yield bcrypt.hash(password, salt);
         }
         yield updatedUser.save();
-        res.status(200).send("Kullanıcı başarıyla güncellendi");
+        response.status(200).send("Kullanıcı başarıyla güncellendi");
     }
     catch (error) {
         console.error("Güncelleme hatası:", error);
-        res.status(500).send("Güncelleme işlemi sırasında hata oluştu");
+        response.status(500).send("Güncelleme işlemi sırasında hata oluştu");
     }
 }));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

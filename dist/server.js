@@ -264,32 +264,11 @@ app.get("/register", csrfProtection, (request, response) => {
     response.render("register", { csrfToken: request.csrfToken() });
 });
 app.get("/register/api", csrfProtection, (request, response) => __awaiter(void 0, void 0, void 0, function* () {
-    // İstek gövdesinde JSON(Javascript Object Notation) formatında veri göndereceğini belirtir.
-    //response.setHeader("Content-Type", "application/json");
-    //response.setHeader("Content-Type", "text/plain"); // name Hamit surnameMızrak
-    response.setHeader("Content-Type", "text/html");
-    //response.setHeader("Content-Type", "application/x-www-form-urlencoded"); // name=Hamit&surname=Mizrak
-    // cache-control: Yanıtları hızlı sunmak için ve sunucya gereksiz istekleri azaltmak için
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    // Sitemizi başka sitelerde iframe ile açılmasını engellemek
-    // clickjacking saldırılarına karşı korumayı sağlar
-    response.setHeader("X-Frame-Options", "DENY");
-    // X-XSS-Protection: Tarayıca tarafından XSS(Cross-Site Scripting) saldırılarıa karşı koruma
-    // XSS saldırısını tespit ederse sayfanın yüklenmesini engeller.
-    response.setHeader("X-XSS-Protection", "1; mode=block");
-    // Access Control (CORS Başlıkları)
-    // XBaşka bir kaynaktan gelen istekleri kontrol etmet için CORS başlığı ekleyebiliriz.
-    response.setHeader("Access-Control-Allow-Origin", "https://example.com");
-    // Access-Control-Allow-Methods
-    // Sunucunun hangi HTTP yöntemlerini kabul etiğini gösterir.
-    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
-    // Access-Control-Allow-Headers
-    // Bu başlıklar, taryıcınının sunucuya göndereceği özel başlıklar göndersin
-    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     // dist/server.js
     try {
         const RegisterModel = require("../models/mongoose_blog_register_models"); // Modeli ekleyin
-        const registers = yield RegisterModel.find(); // Tüm blog verilerini al
+        const registers = yield RegisterModel.find(); // Tüm register verilerini al
+        response.setHeader("Content-Type", "application/json"); // Yanıtın JSON formatında olduğunu belirtir
         response.json(registers); // JSON formatında döndür
     }
     catch (error) {
@@ -297,38 +276,6 @@ app.get("/register/api", csrfProtection, (request, response) => __awaiter(void 0
         response.status(500).send("Veri alınırken hata oluştu.");
     }
 }));
-app.delete("/register/api/:id", csrfProtection, (req, res) => {
-    const { id } = req.params;
-    const RegisterModel = require("../models/mongoose_blog_register_models");
-    RegisterModel.findByIdAndDelete(id)
-        .then(() => res.status(200).send("Kullanıcı silindi"))
-        .catch((error) => {
-            console.error("Silme hatası:", error);
-            res.status(500).send("Silme işlemi sırasında hata oluştu");
-        });
-});
-app.put("/register/api/:id", csrfProtection, (req, res) => {
-    const { id } = req.params;
-    const { username, password, email } = req.body; // İstemciden gelen veriler
-
-    const RegisterModel = require("../models/mongoose_blog_register_models");
-
-    // Güncellenmek istenen alanları belirliyoruz
-    const updateData = { username, password, email };
-
-    RegisterModel.findByIdAndUpdate(id, updateData, { new: true })
-        .then((updatedUser) => {
-            if (!updatedUser) {
-                return res.status(404).send("Kullanıcı bulunamadı");
-            }
-            res.status(200).send("Kullanıcı başarıyla güncellendi");
-        })
-        .catch((error) => {
-            console.error("Güncelleme hatası:", error);
-            res.status(500).send("Güncelleme işlemi sırasında hata oluştu");
-        });
-});
-
 // Form verilerini işleyen rota
 // DİKKATT: Eğer  blog_api_routes.js post kısmında event.preventDefault(); kapatırsam buraki kodlar çalışır.
 // blog için CSRF koruması eklenmiş POST işlemi

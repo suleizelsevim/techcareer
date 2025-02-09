@@ -5,7 +5,7 @@
 // NOT: Eğer bu sayfada Typescript kullansaydım reqire yerine import kullanacaktım.
 // Import
 const mongoose = require("mongoose");
-
+const moment=require("moment");
 // Schema adından (BlogPostSchema)
 const BlogRegisterSchema = new mongoose.Schema({
         // 1.YOL (HEADER)
@@ -39,7 +39,7 @@ const BlogRegisterSchema = new mongoose.Schema({
 
         // DATE
         dateInformation: {
-            type: String, default: Date.now(),
+            type: Date, default: Date.now,
         },
 
 

@@ -1,7 +1,7 @@
 :root {
-    --primary-color: #007bff !important;
-    --body-bgcolor: #3b5b5d !important;
-    --body-color: #b7e8ec !important;
+    --primary-color: #353535 !important;
+    --body-bgcolor: #ffffff !important;
+    --body-color: #2b3434 !important;
 }
 
 * {
@@ -15,15 +15,20 @@ html {
 }
 
 body {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Times New Roman', Times, serif;
     font-size: 1.2rem;
     line-height: 1.2;
     background-color: #d51a1a;
     color: var(--body-color);
     background-color: var(--body-bgcolor);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    display: flex
+;
+    justify-content: flex-start;
 }
 
 a {
@@ -59,4 +64,69 @@ img:hover {
 
 .lowercase {
     text-transform: lowercase;
+}
+
+.register_container {
+    width: 28vw;
+    height: 150rem;
+    max-width: 50vw;
+    min-height: 37rem;
+    margin: auto;
+    margin-top: 16vh;
+    padding: 6rem;
+    border-radius: 3px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px 0px #00000036;
+    display: flex;
+    flex-direction: column;
+}
+
+.form_div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    gap: 2rem;
+}
+
+.buttons{
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    margin-top: 21rem;
+    position: absolute;
+}
+
+.border-top-0{
+    width: 22vw;
+}
+
+@media (max-width: 768px) {
+    .register_container {
+        padding: 10px;
+    }
+
+    .form-control {
+        padding: 8px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+}
+
+/* Daha küçük ekranlar için stil tanımlamaları */
+@media (max-width: 480px) {
+    .register_container {
+        padding: 5px;
+    }
+
+    .form-control {
+        padding: 6px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
 }

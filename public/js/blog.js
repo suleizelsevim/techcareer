@@ -115,8 +115,11 @@ $(document).ready(function () {
         
                 console.log("data",data)
                 data=JSON.parse(data)
+                
                 console.log("data", typeof data)
                 data.forEach(item => {
+                    const date = new Date(Number(item.dateInformation)).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" });
+
                     $tbody.append(`
                         <tr data-id="${item._id}">
                             <td>${item._id}</td>
@@ -126,7 +129,7 @@ $(document).ready(function () {
                             <td>${item.tags}</td>
                             <td>${item.views}</td>
                             <td>${item.status}</td>
-                            <td>${item.dateInformation}</td>
+                            <td>${date}</td>
                             <td>
                                 <button class="btn btn-primary edit-btn"><i class="fa-solid fa-wrench"></i></button>
                                 <button class="btn btn-danger delete-btn"><i class="fa-solid fa-trash"></i></button>

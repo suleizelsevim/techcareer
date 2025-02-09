@@ -1,7 +1,7 @@
 $(document).ready(function () {
     let isUpdating = false;
     let updateId = null;
-    const maxChars = 2000; // Maksimum harf sayısı
+    const minChars = 12; // minimum karakter sayısı
 
     // Hata mesajlarını temizleme fonksiyonu
     const clearErrors = () => {
@@ -19,53 +19,103 @@ $(document).ready(function () {
         $(element).next(".error-message, .valid-message").remove();
         $(element).after(`<small class="text-success valid-message">${message}</small>`);
     };
+    const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
 
     // İçerik harf sınırını kontrol etme fonksiyonu
-    const updateCharCount = () => {
-        const content = $("#password").val();
-        const charCount = content.length;
-        const remainingChars = maxChars - charCount;
+// Şifre kontrol fonksiyonu
+const validatePassword = (password) => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-        $("#char-count").text(`Kalan Harf Sayısı: ${remainingChars}`);
-
-        if (remainingChars < 0) {
-            $("#char-count").removeClass("text-success").addClass("text-danger");
-            showError("#password", "İçerik 2000 harften fazla olamaz!");
-        } else {
-            $("#char-count").removeClass("text-danger").addClass("text-success");
-            $(".error-message").remove();
-        }
-    };
+    if (password.length < minLength) {
+        return "Şifre en az 8 karakter olmalıdır!";
+    }
+    if (!hasUpperCase) {
+        return "Şifre en az bir büyük harf içermelidir!";
+    }
+    if (!hasLowerCase) {
+        return "Şifre en az bir küçük harf içermelidir!";
+    }
+    if (!hasNumber) {
+        return "Şifre en az bir rakam içermelidir!";
+    }
+    if (!hasSpecialChar) {
+        return "Şifre en az bir özel karakter içermelidir!";
+    }
+    return null; // Şifre geçerli
+};
 
     // Form doğrulama fonksiyonu
     const validateForm = () => {
         clearErrors();
         let isValid = true;
         const password = $("#password").val();
+        const email = $("#email").val();
+        const username=$("#username").val();
         const charCount = password.length;
+        const usernameCharCount=username.length;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
         if ($("#username").val().trim() === "") {
             showError("#username", "kullanıcı adı boş bırakılamaz!");
             isValid = false;
-        } else {
+        } 
+        else if(usernameCharCount<5){
+            showError("#username", "Kullanıcı adı en az 5 karakter olmalıdır!");
+            isValid = false;
+        }
+        
+        else {
             showValid("#username", "kullanıcı adı geçerli.");
         }
 
         if (password.trim() === "") {
             showError("#password", "şifre boş bırakılamaz!");
             isValid = false;
-        } else if (charCount > maxChars) {
-            showError("#password", "şifre 2000 harften fazla olamaz!");
+        } else if (charCount < minChars) {
+            showError("#password", "şifre 12 karakterden fazla olmalı!");
             isValid = false;
-        } else {
+        }
+        else if(hasUpperCase!==true){
+            showError("#password", "Şifre en az bir büyük harf içermelidir!");
+            isValid = false;
+        }
+        else if (hasLowerCase!==true) {
+            showError("#password", "Şifre en az bir küçük harf içermelidir!");
+            isValid = false;
+        }
+        else if(hasNumber!==true){
+            showError("#password", "Şifre en az bir rakam içermelidir!");
+            isValid = false;
+        }
+        else if(hasSpecialChar!==true){
+            showError("#password", "Şifre en az bir özel karakter içermelidir!");
+            isValid = false;
+        }
+         else {
             showValid("#password", "İçerik geçerli.");
         }
 
         if ($("#email").val().trim() === "") {
-            showError("#email", "Yazar adı boş bırakılamaz!");
+            showError("#email", "email adı boş bırakılamaz!");
             isValid = false;
-        } else {
-            showValid("#email", "Yazar adı geçerli.");
+        } 
+        else if(!validateEmail(email)){
+            showError("#email", "Geçerli bir email adresi giriniz!");
+            isValid = false;
+        }
+        
+        else {
+            showValid("#email", "Geçerli.");
         }
 
         return isValid;
@@ -73,15 +123,61 @@ $(document).ready(function () {
 
     // Kullanıcı içerik alanına yazdıkça harf sayısını güncelle
 
+    $("#username").on("input", function(){
+        const username=$("#username").val();
+        const charCount = username.length;
+        const minChar=5
 
+        if(charCount<minChar){
+            showError("#username", "Kullanıcı adı en az 5 karakter olmalıdır!");
+        }
+        else{
+            showValid("#username", "Geçerli.");
+        }
+    });
+    $("#email").on("input", function(){
+        const email = $("#email").val();
+        if(!validateEmail(email)){
+            showError("#email", "Geçerli bir email adresi giriniz!");
+            isValid = false;
+        }
+        else {
+            showValid("#email", "Geçerli.");
+        }
+    })
     // Kullanıcı input'a yazarken hataları kaldır ve geçerli mesaj ekle
-    $("#username, #password, #email").on("input", function () {
+    $("#password").on("input", function () {
         const field = $(this);
+        const password = $("#password").val();
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        const charCount = password.length;
+        const minChars = 12; // minimum karakter sayısı
         if (field.val().trim() === "") {
             showError(field, "Bu alan boş bırakılamaz!");
-        } else {
+        } 
+        else if(hasUpperCase!==true){
+            showError("#password", "Şifre en az bir büyük harf içermelidir!");
+        
+        }
+        else if (hasLowerCase!==true) {
+            showError("#password", "Şifre en az bir küçük harf içermelidir!");
+        }
+        else if(hasNumber!==true){
+            showError("#password", "Şifre en az bir rakam içermelidir!");
+        }
+        else if(hasSpecialChar!==true){
+            showError("#password", "Şifre en az bir özel karakter içermelidir!");
+        }
+        else if (charCount < minChars) {
+            showError("#password", "Şifre 12 karakterden az olamaz!");
+        }
+        else {
             showValid(field, "Geçerli.");
         }
+        
     });
 
     // Formu sıfırlama fonksiyonu
@@ -89,9 +185,8 @@ $(document).ready(function () {
         $("#register-form")[0].reset();
         isUpdating = false;
         updateId = null;
-        $("#submit-btn").text("Ekle");
+        $("#submit-btn").text("Kayıt Ol");
         clearErrors();
-        updateCharCount();
     };
 
     // Blog listesini getir
@@ -101,17 +196,22 @@ $(document).ready(function () {
             method: "GET",
             success: function (data) {
                 const $tbody = $("#register-table tbody").empty();
-                data = JSON.parse(data);
+                console.log("data", data);
+                typeof data === "string"?data = JSON.parse(data):data
+
                 console.log("data", data);
                 
                 data.forEach(item => {
+                    const createDate = new Date(item.createdAt).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" });
+                    const updateDate=new Date(item.updatedAt).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" });
                     $tbody.append(`
                         <tr data-id="${item._id}">
                             <td>${item._id}</td>
                             <td>${item.username}</td>
                             <td>${item.password}</td>
                             <td>${item.email}</td>
-                            <td>${item.date}</td>
+                            <td>${createDate}</td>
+                            <td>${updateDate}</td>
                             <td>
                                 <button class="btn btn-primary edit-btn"><i class="fa-solid fa-wrench"></i></button>
                                 <button class="btn btn-danger delete-btn"><i class="fa-solid fa-trash"></i></button>
@@ -170,11 +270,12 @@ $(document).ready(function () {
             });
         }
     });
-
+    
     // Blog güncelleme işlemi
     $("#register-table tbody").on("click", ".edit-btn", function () {
         const row = $(this).closest("tr");
         const id = row.data("id");
+
 
         $("#username").val(row.find("td:eq(1)").text());
         $("#password").val(row.find("td:eq(2)").text());
@@ -182,7 +283,7 @@ $(document).ready(function () {
 
         isUpdating = true;
         updateId = id;
-        $("#submit-btn").text("Güncelle");
+        isUpdating ? $("#submit-btn").text("Güncelle") : $("#submit-btn").text("Kayıt Ol");
     });
 
     // Blog silme işlemi
@@ -204,5 +305,4 @@ $(document).ready(function () {
 
     // Sayfa yüklendiğinde blog listesini getir
     fetchRegisterList();
-    updateCharCount(); // Başlangıçta harf sayacını güncelle
 });
